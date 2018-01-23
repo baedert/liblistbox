@@ -50,13 +50,12 @@ G_DECLARE_FINAL_TYPE (GdModelListBox, gd_model_list_box, GD, MODEL_LIST_BOX, Gtk
  *       just be part of _set_model.
  */
 GtkWidget *  gd_model_list_box_new             (void);
-void         gd_model_list_box_set_model       (GdModelListBox *box,
-                                                GListModel     *model);
+void         gd_model_list_box_set_model       (GdModelListBox           *box,
+                                                GListModel               *model,
+                                                GdModelListBoxFillFunc    fill_func,
+                                                gpointer                  fill_data,
+                                                GdModelListBoxRemoveFunc  remove_func,
+                                                gpointer                  remove_data);
 GListModel * gd_model_list_box_get_model       (GdModelListBox *box);
-void         gd_model_list_box_set_fill_func   (GdModelListBox           *self,
-                                                GdModelListBoxFillFunc    func,
-                                                gpointer                  user_data);
-void         gd_model_list_box_set_remove_func (GdModelListBox           *self,
-                                                GdModelListBoxRemoveFunc  func,
-                                                gpointer                  user_data);
+
 #endif

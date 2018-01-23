@@ -63,8 +63,10 @@ simple (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
 
   w = gtk_label_new ("Some Text");
   g_list_store_append (store, w);
@@ -181,8 +183,10 @@ overscroll (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
 
   // First 10 large rows
   for (i = 0; i < 10; i ++)
@@ -294,8 +298,10 @@ scrolling (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
 
   // First 10 large rows
   for (i = 0; i < 10; i ++)
@@ -399,8 +405,11 @@ overscroll_top (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
+
 
   // First 1 small row
     {
@@ -483,8 +492,11 @@ scroll_to_bottom_resize (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
+
 
   for (i = 0; i < 10; i ++)
     {
@@ -555,8 +567,11 @@ model_change (void)
   g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
   g_assert_cmpint (nat, ==, 1);
 
-  gd_model_list_box_set_fill_func (GD_MODEL_LIST_BOX (listbox), label_from_label, NULL);
-  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox), G_LIST_MODEL (store));
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL,
+                               NULL, NULL);
+
 
   for (i = 0; i < 10; i ++)
     {

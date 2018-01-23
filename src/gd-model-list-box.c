@@ -824,27 +824,12 @@ gd_model_list_box_new (void)
 }
 
 void
-gd_model_list_box_set_fill_func (GdModelListBox         *self,
-                                 GdModelListBoxFillFunc  func,
-                                 gpointer                user_data)
-{
-  self->fill_func = func;
-  self->fill_func_data = user_data;
-}
-
-void
-gd_model_list_box_set_remove_func (GdModelListBox           *self,
-                                   GdModelListBoxRemoveFunc  func,
-                                   gpointer                  user_data)
-
-{
-  self->remove_func = func;
-  self->remove_func_data = user_data;
-}
-
-void
-gd_model_list_box_set_model (GdModelListBox *self,
-                             GListModel     *model)
+gd_model_list_box_set_model (GdModelListBox           *self,
+                             GListModel               *model,
+                             GdModelListBoxFillFunc    fill_func,
+                             gpointer                  fill_data,
+                             GdModelListBoxRemoveFunc  remove_func,
+                             gpointer                  remove_data)
 {
   g_return_if_fail (GD_IS_MODEL_LIST_BOX (self));
 
@@ -861,6 +846,12 @@ gd_model_list_box_set_model (GdModelListBox *self,
       g_signal_connect (G_OBJECT (model), "items-changed", G_CALLBACK (items_changed_cb), self);
       g_object_ref (model);
     }
+
+  self->fill_func = fill_func;
+  self->fill_func_data = fill_data;
+
+  self->remove_func = remove_func;
+  self->remove_func_data = remove_data;
 
   ensure_visible_widgets (self);
 
