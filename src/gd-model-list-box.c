@@ -693,6 +693,25 @@ __snapshot (GtkWidget   *widget,
   gtk_snapshot_pop (snapshot);
 }
 
+static GtkWidget *
+__pick (GtkWidget *widget,
+        double     x,
+        double     y)
+{
+  if (x >= 0 && x <= gtk_widget_get_width (widget) &&
+      y >= 0 && y <= gtk_widget_get_height(widget))
+    {
+      return GTK_WIDGET_CLASS (gd_model_list_box_parent_class)->pick (widget, x, y);
+    }
+  else
+    {
+      if (gtk_widget_contains (widget, x, y))
+        return widget;
+      else
+        return NULL;
+    }
+}
+
 static void
 __measure (GtkWidget      *widget,
            GtkOrientation  orientation,
@@ -875,6 +894,7 @@ gd_model_list_box_class_init (GdModelListBoxClass *class)
   object_class->get_property = __get_property;
   object_class->finalize     = __finalize;
 
+  widget_class->pick          = __pick;
   widget_class->measure       = __measure;
   widget_class->size_allocate = __size_allocate;
   widget_class->snapshot      = __snapshot;
