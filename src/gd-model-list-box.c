@@ -671,16 +671,12 @@ __snapshot (GtkWidget   *widget,
             GtkSnapshot *snapshot)
 {
   GdModelListBox *self = GD_MODEL_LIST_BOX (widget);
-  GtkAllocation alloc;
-
-  /* TODO: This should be the content size */
-  gtk_widget_get_allocation (widget, &alloc);
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
                             0, 0,
-                            alloc.width,
-                            alloc.height
+                            gtk_widget_get_width (widget),
+                            gtk_widget_get_height (widget)
                           ),
                           "GdModelListBox clip");
 
