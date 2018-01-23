@@ -45,10 +45,6 @@ typedef struct _GdModelListBox GdModelListBox;
 
 G_DECLARE_FINAL_TYPE (GdModelListBox, gd_model_list_box, GD, MODEL_LIST_BOX, GtkWidget)
 
-/*
- * TODO: Both the fill and the remove func (the latter nullable) should
- *       just be part of _set_model.
- */
 GtkWidget *  gd_model_list_box_new             (void);
 void         gd_model_list_box_set_model       (GdModelListBox           *box,
                                                 GListModel               *model,
