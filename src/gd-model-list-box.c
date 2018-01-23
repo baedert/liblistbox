@@ -190,7 +190,7 @@ estimated_list_height (GdModelListBox *self)
 
 /**
  * When we set the vadjustment value from within this widget, we need to care about two things:
- *   
+ *
  *   1) Block the signal handler. It's mostly harmless but we don't want to unnecessarily
  *      redo things and we especially don't want to call queue_allocate or even queue_resize
  *      during size-allocate.
