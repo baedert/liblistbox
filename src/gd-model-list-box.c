@@ -101,7 +101,7 @@ requested_row_height (GdModelListBox *box,
   int min;
   gtk_widget_measure (w,
                       GTK_ORIENTATION_VERTICAL,
-                      gtk_widget_get_allocated_width (GTK_WIDGET (box)),
+                      gtk_widget_get_width (GTK_WIDGET (box)),
                       &min, NULL, NULL, NULL);
   return min;
 }
@@ -154,7 +154,7 @@ bin_height (GdModelListBox *self)
   Foreach_Row
     gtk_widget_measure (row,
                         GTK_ORIENTATION_VERTICAL,
-                        gtk_widget_get_allocated_width (GTK_WIDGET (self)),
+                        gtk_widget_get_width (GTK_WIDGET (self)),
                         &min, NULL, NULL, NULL);
 
     height += min;
@@ -230,7 +230,7 @@ configure_adjustment (GdModelListBox *self)
   double page_size;
   double cur_value;
 
-  widget_height = gtk_widget_get_allocated_height (GTK_WIDGET (self));
+  widget_height = gtk_widget_get_height (GTK_WIDGET (self));
   list_height   = estimated_list_height (self);
   cur_upper     = gtk_adjustment_get_upper (self->vadjustment);
   cur_value     = gtk_adjustment_get_value (self->vadjustment);
@@ -276,8 +276,7 @@ ensure_visible_widgets (GdModelListBox *self)
       g_list_model_get_n_items (self->model) == 0)
     return;
 
-  // TODO: This should use the "content height"
-  widget_height = gtk_widget_get_allocated_height (GTK_WIDGET (self));
+  widget_height = gtk_widget_get_height (GTK_WIDGET (self));
 
   g_debug ("------------------------");
   g_debug ("        value: %f", gtk_adjustment_get_value (self->vadjustment));
