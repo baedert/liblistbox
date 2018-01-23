@@ -828,8 +828,10 @@ gd_model_list_box_set_model (GdModelListBox           *self,
                              GListModel               *model,
                              GdModelListBoxFillFunc    fill_func,
                              gpointer                  fill_data,
+                             GDestroyNotify            fill_destroy_notify,
                              GdModelListBoxRemoveFunc  remove_func,
-                             gpointer                  remove_data)
+                             gpointer                  remove_data,
+                             GDestroyNotify            remove_destroy_notify)
 {
   g_return_if_fail (GD_IS_MODEL_LIST_BOX (self));
 

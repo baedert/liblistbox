@@ -65,8 +65,8 @@ simple (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   w = gtk_label_new ("Some Text");
   g_list_store_append (store, w);
@@ -185,8 +185,8 @@ overscroll (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   // First 10 large rows
   for (i = 0; i < 10; i ++)
@@ -300,8 +300,8 @@ scrolling (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   // First 10 large rows
   for (i = 0; i < 10; i ++)
@@ -407,9 +407,8 @@ overscroll_top (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
-
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   // First 1 small row
     {
@@ -494,9 +493,8 @@ scroll_to_bottom_resize (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
-
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   for (i = 0; i < 10; i ++)
     {
@@ -569,9 +567,8 @@ model_change (void)
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
-                               label_from_label, NULL,
-                               NULL, NULL);
-
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
 
   for (i = 0; i < 10; i ++)
     {

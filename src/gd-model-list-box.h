@@ -54,8 +54,10 @@ void         gd_model_list_box_set_model       (GdModelListBox           *box,
                                                 GListModel               *model,
                                                 GdModelListBoxFillFunc    fill_func,
                                                 gpointer                  fill_data,
+                                                GDestroyNotify            fill_destroy_notify,
                                                 GdModelListBoxRemoveFunc  remove_func,
-                                                gpointer                  remove_data);
+                                                gpointer                  remove_data,
+                                                GDestroyNotify            remove_destroy_notify);
 GListModel * gd_model_list_box_get_model       (GdModelListBox *box);
 
 #endif
