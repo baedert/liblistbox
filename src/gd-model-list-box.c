@@ -635,14 +635,46 @@ pressed_cb (GtkGestureMultiPress *gesture,
     gtk_widget_translate_coordinates (GTK_WIDGET (self), row, x, y, &wx, &wy);
     if (gtk_widget_contains (row, wx, wy))
       {
-        guint item_index = self->model_from + i;
-        gpointer item = g_list_model_get_item (self->model, item_index);
-
-        g_signal_emit (self, signals[SIGNAL_ROW_ACTIVATED], 0,
-                       row, item, item_index);
+        self->active_row = row;
+        gtk_widget_set_state_flags (row, GTK_STATE_FLAG_ACTIVE, FALSE);
         break;
       }
   }}
+}
+
+static void
+released_cb (GtkGestureMultiPress *gesture,
+             int                   n_press,
+             double                x,
+             double                y,
+             gpointer              user_data)
+{
+  GdModelListBox *self = user_data;
+
+  Foreach_Row
+    int wx, wy;
+    gtk_widget_translate_coordinates (GTK_WIDGET (self), row, x, y, &wx, &wy);
+    if (gtk_widget_contains (row, wx, wy))
+      {
+        if (row == self->active_row)
+          {
+            guint item_index = self->model_from + i;
+            gpointer item = g_list_model_get_item (self->model, item_index);
+
+            g_signal_emit (self, signals[SIGNAL_ROW_ACTIVATED], 0,
+                           row, item, item_index);
+          }
+        break;
+      }
+  }}
+
+
+  if (self->active_row != NULL)
+    {
+      gtk_widget_unset_state_flags (self->active_row, GTK_STATE_FLAG_ACTIVE);
+    }
+
+  self->active_row = NULL;
 }
 
 /* GtkWidget vfuncs {{{ */
@@ -954,4 +986,5 @@ gd_model_list_box_init (GdModelListBox *self)
 
   self->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   g_signal_connect (self->press_gesture, "pressed", G_CALLBACK (pressed_cb), self);
+  g_signal_connect (self->press_gesture, "released", G_CALLBACK (released_cb), self);
 }

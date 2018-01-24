@@ -34,6 +34,7 @@ struct _GdModelListBox
   double last_value;
 
   GtkGesture *press_gesture;
+  GtkWidget *active_row;
 };
 
 struct _GdModelListBoxClass

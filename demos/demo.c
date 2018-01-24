@@ -107,6 +107,9 @@ static const char *CSS =
 "row:hover {"
 "  background-color: alpha(grey, 0.2);"
 "}"
+"row:active {"
+"  background-color: green;"
+"}"
 ;
 
 static void
