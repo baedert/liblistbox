@@ -32,6 +32,8 @@ struct _GdModelListBox
   double bin_y_diff;
 
   double last_value;
+
+  GtkGesture *press_gesture;
 };
 
 struct _GdModelListBoxClass

@@ -23,6 +23,11 @@ G_DEFINE_TYPE_WITH_CODE (GdModelListBox, gd_model_list_box, GTK_TYPE_WIDGET,
 #define Foreach_Row {guint i; for (i = 0; i < self->widgets->len; i ++){ \
                        GtkWidget *row = g_ptr_array_index (self->widgets, i);
 
+enum {
+  SIGNAL_ROW_ACTIVATED,
+  LAST_SIGNAL
+};
+static guint signals[LAST_SIGNAL] = { 0 };
 
 enum {
   PROP_0,
@@ -616,6 +621,30 @@ items_changed_cb (GListModel *model,
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
+static void
+pressed_cb (GtkGestureMultiPress *gesture,
+            int                   n_press,
+            double                x,
+            double                y,
+            gpointer              user_data)
+{
+  GdModelListBox *self = user_data;
+
+  Foreach_Row
+    int wx, wy;
+    gtk_widget_translate_coordinates (GTK_WIDGET (self), row, x, y, &wx, &wy);
+    if (gtk_widget_contains (row, wx, wy))
+      {
+        guint item_index = self->model_from + i;
+        gpointer item = g_list_model_get_item (self->model, item_index);
+
+        g_signal_emit (self, signals[SIGNAL_ROW_ACTIVATED], 0,
+                       row, item, item_index);
+        break;
+      }
+  }}
+}
+
 /* GtkWidget vfuncs {{{ */
 static void
 __size_allocate (GtkWidget           *widget,
@@ -826,6 +855,7 @@ __finalize (GObject *obj)
   g_clear_object (&self->hadjustment);
   g_clear_object (&self->vadjustment);
   g_clear_object (&self->model);
+  g_clear_object (&self->press_gesture);
 
   G_OBJECT_CLASS (gd_model_list_box_parent_class)->finalize (obj);
 }
@@ -900,6 +930,14 @@ gd_model_list_box_class_init (GdModelListBoxClass *class)
   g_object_class_override_property (object_class, PROP_HSCROLL_POLICY, "hscroll-policy");
   g_object_class_override_property (object_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
+  signals[SIGNAL_ROW_ACTIVATED] = g_signal_new ("row-activated",
+                                                G_OBJECT_CLASS_TYPE (object_class),
+                                                G_SIGNAL_RUN_FIRST,
+                                                0,
+                                                NULL, NULL,
+                                                NULL, G_TYPE_NONE,
+                                                3, GTK_TYPE_WIDGET, G_TYPE_POINTER, G_TYPE_UINT);
+
   gtk_widget_class_set_css_name (widget_class, "list");
 }
 
@@ -913,4 +951,7 @@ gd_model_list_box_init (GdModelListBox *self)
   self->model_from = 0;
   self->model_to   = 0;
   self->bin_y_diff = 0;
+
+  self->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
+  g_signal_connect (self->press_gesture, "pressed", G_CALLBACK (pressed_cb), self);
 }
