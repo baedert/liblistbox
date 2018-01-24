@@ -25,3 +25,22 @@ liblistbox_dep = declare_dependency(
 )
 
 subdir('tests')
+
+
+# (Maybe) build demos
+if get_option('demos')
+  demo_deps = [gtk_dep, liblistbox_dep]
+
+  imagelist_demo = executable(
+    'imagelist',
+    'demos/imagelist.c',
+    dependencies: demo_deps,
+  )
+
+  demo_demo = executable(
+    'demo',
+    'demos/demo.c',
+    dependencies: demo_deps
+  )
+
+endif
