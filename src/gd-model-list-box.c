@@ -798,8 +798,8 @@ __measure (GtkWidget      *widget,
     }
   else /* VERTICAL */
     {
-      *minimum = 1;
-      *natural = 1;
+      *minimum = 0;
+      *natural = 0;
     }
 }
 /* }}} */

@@ -60,8 +60,8 @@ simple (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
@@ -79,8 +79,8 @@ simple (void)
   gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
   /* We always request the minimum height */
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1);
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   /* Width should be one row now though */
   gtk_widget_measure (listbox, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat, NULL, NULL);
@@ -180,8 +180,8 @@ overscroll (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
@@ -295,8 +295,8 @@ scrolling (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
@@ -402,8 +402,8 @@ overscroll_top (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
@@ -488,8 +488,8 @@ scroll_to_bottom_resize (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
@@ -562,8 +562,8 @@ model_change (void)
 
   // Empty model
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
-  g_assert_cmpint (min, ==, 1); // XXX Widgets still have a min size of 1
-  g_assert_cmpint (nat, ==, 1);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
 
   gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
                                G_LIST_MODEL (store),
