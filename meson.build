@@ -43,4 +43,10 @@ if get_option('demos')
     dependencies: demo_deps
   )
 
+  columns_demo = executable(
+    'columns',
+    'demos/columns.c',
+    dependencies: demo_deps
+  )
+
 endif

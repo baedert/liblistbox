@@ -101,7 +101,7 @@ GtkSizeGroup *size_group2;
 
 GListModel *model;
 
-const guint N = 600000;
+const guint N = 12;
 
 static const char *CSS =
 "row:hover {"
@@ -165,6 +165,11 @@ fill_func (gpointer   item,
     {
       row = GD_ROW_WIDGET (old_widget);
     }
+
+  if (item_index > 0)
+    gtk_widget_hide (row->remove_button);
+  else
+    gtk_widget_show (row->remove_button);
 
 #if 0
   if (item_index < N / 2)

@@ -597,18 +597,87 @@ model_change (void)
   gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
 }
 
+static void
+model_change_at_bottom (void)
+{
+  GtkWidget *listbox = gd_model_list_box_new ();
+  GtkWidget *scroller = gtk_scrolled_window_new (NULL, NULL);
+  GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
+  int min, nat;
+  GtkAllocation fake_alloc;
+  GtkAllocation fake_clip;
+  GtkAdjustment *vadjustment;
+  int i;
+
+  gtk_container_add (GTK_CONTAINER (scroller), listbox);
+  g_object_ref_sink (G_OBJECT (scroller));
+
+  vadjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scroller));
+
+  g_assert (gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (listbox)) == vadjustment);
+
+  // No viewport in between
+  g_assert (gtk_widget_get_parent (listbox) == scroller);
+  g_assert (GTK_IS_SCROLLABLE (listbox));
+
+  // Empty model
+  gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
+  g_assert_cmpint (min, ==, 0);
+  g_assert_cmpint (nat, ==, 0);
+
+  gd_model_list_box_set_model (GD_MODEL_LIST_BOX (listbox),
+                               G_LIST_MODEL (store),
+                               label_from_label, NULL, NULL,
+                               NULL, NULL, NULL);
+
+  for (i = 0; i < 10; i ++)
+    {
+      GtkWidget *w = gtk_label_new ("FOO!");
+      g_object_set_data (G_OBJECT (w), "height", GINT_TO_POINTER (ROW_HEIGHT));
+      g_list_store_append (store, w);
+    }
+  g_assert (g_list_model_get_n_items (G_LIST_MODEL (store)) == 10);
+
+  gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+
+  fake_alloc.x = 0;
+  fake_alloc.y = 0;
+  fake_alloc.width = MAX (min, 300);
+  fake_alloc.height = 500;
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+
+  g_message ("________________________________");
+  // Scroll to bottom
+  double new_value = gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment);
+  gtk_adjustment_set_value (vadjustment, new_value);
+  gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+
+  // Now insert more elements at the end of the model
+  for (i = 0; i < 2; i ++)
+    {
+      GtkWidget *w = gtk_label_new ("FOO!");
+      g_object_set_data (G_OBJECT (w), "height", GINT_TO_POINTER (ROW_HEIGHT));
+      g_list_store_append (store, w);
+    }
+
+  gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+}
+
 int
 main (int argc, char **argv)
 {
   gtk_init ();
   g_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/listbox/simple", simple);
-  g_test_add_func ("/listbox/overscroll", overscroll);
-  g_test_add_func ("/listbox/scrolling", scrolling);
-  g_test_add_func ("/listbox/scroll-to-bottom-resize", scroll_to_bottom_resize);
-  g_test_add_func ("/listbox/overscroll_top", overscroll_top);
-  g_test_add_func ("/listbox/model-change", model_change);
+  /*g_test_add_func ("/listbox/simple", simple);*/
+  /*g_test_add_func ("/listbox/overscroll", overscroll);*/
+  /*g_test_add_func ("/listbox/scrolling", scrolling);*/
+  /*g_test_add_func ("/listbox/scroll-to-bottom-resize", scroll_to_bottom_resize);*/
+  /*g_test_add_func ("/listbox/overscroll_top", overscroll_top);*/
+  /*g_test_add_func ("/listbox/model-change", model_change);*/
+  g_test_add_func ("/listbox/model-change-at-bottom", model_change_at_bottom);
 
   return g_test_run ();
 }

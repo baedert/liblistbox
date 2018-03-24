@@ -601,6 +601,7 @@ items_changed_cb (GListModel *model,
   int i;
 
   g_debug ("%s: position %d, removed: %u, added: %u", __FUNCTION__, position, removed, added);
+  g_message ("Range: %u-%u", self->model_from, self->model_to);
 
   /* If the change is out of our visible range anyway,
    * we don't care. */
@@ -976,7 +977,7 @@ gd_model_list_box_class_init (GdModelListBoxClass *class)
 static void
 gd_model_list_box_init (GdModelListBox *self)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->widgets    = g_ptr_array_sized_new (20);
   self->pool       = g_ptr_array_sized_new (10);
