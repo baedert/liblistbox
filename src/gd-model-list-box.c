@@ -682,8 +682,7 @@ released_cb (GtkGestureMultiPress *gesture,
 static void
 __size_allocate (GtkWidget           *widget,
                  const GtkAllocation *allocation,
-                 int                  baseline,
-                 GtkAllocation       *out_clip)
+                 int                  baseline)
 {
   GdModelListBox *self = GD_MODEL_LIST_BOX (widget);
   static int k =0;
@@ -718,7 +717,7 @@ __size_allocate (GtkWidget           *widget,
                    child_alloc.y,
                    child_alloc.width,
                    child_alloc.height);
-        gtk_widget_size_allocate (row, &child_alloc, -1, out_clip);
+        gtk_widget_size_allocate (row, &child_alloc, -1);
 
         y += h;
       }}

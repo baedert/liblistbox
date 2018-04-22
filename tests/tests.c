@@ -43,7 +43,6 @@ simple (void)
   GtkWidget *w;
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -76,7 +75,7 @@ simple (void)
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
 
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
   /* We always request the minimum height */
   gtk_widget_measure (listbox, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
   g_assert_cmpint (min, ==, 0);
@@ -87,7 +86,7 @@ simple (void)
   g_assert_cmpint (min, ==, ROW_WIDTH);
   g_assert_cmpint (nat, ==, ROW_WIDTH);
 
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   /* 20 all in all */
   for (i = 0; i < 19; i++)
@@ -96,7 +95,7 @@ simple (void)
       g_list_store_append (store, w);
     }
   gtk_widget_measure (listbox, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
   g_assert_cmpint (min, ==, ROW_WIDTH);
   g_assert_cmpint (nat, ==, ROW_WIDTH);
 
@@ -122,7 +121,7 @@ simple (void)
 
   // Force size-allocating all rows after the scrolling above.
   // This works out because changing the adjustment's value will cause a queue_allocate.
-  gtk_widget_size_allocate (listbox, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (listbox, &fake_alloc, -1);
 
   // So, the last one should be allocated at the very bottom of the listbox, nowhere else.
   GtkWidget *last_row = g_ptr_array_index (GD_MODEL_LIST_BOX (listbox)->widgets,
@@ -163,7 +162,6 @@ overscroll (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -213,7 +211,7 @@ overscroll (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // We should have configured the adjustment by now, which will
   // result in 20 * (ROW_HEIGHT * 10) as the estimated upper
@@ -229,7 +227,7 @@ overscroll (void)
 
   // Same size as before, we just want to execute the listbox's size-allocate, which
   // works since changing the adjustment value just means a queue_allocate
-  gtk_widget_size_allocate (listbox, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (listbox, &fake_alloc, -1);
   /*g_message ("-------------------------------------------------");*/
 
   // This will reconfigure the adjustment, now with all small rows
@@ -253,8 +251,8 @@ overscroll (void)
 
 
   /* Twice, just making sure we're done... */
-  gtk_widget_size_allocate (listbox, &fake_alloc, -1, &fake_clip);
-  gtk_widget_size_allocate (listbox, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (listbox, &fake_alloc, -1);
+  gtk_widget_size_allocate (listbox, &fake_alloc, -1);
 
 
   cur_value = gtk_adjustment_get_value (vadjustment);
@@ -278,7 +276,6 @@ scrolling (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -328,7 +325,7 @@ scrolling (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // We should have configured the adjustment by now, which will
   // result in 20 * (ROW_HEIGHT * 10) as the estimated upper
@@ -345,7 +342,7 @@ scrolling (void)
       gtk_adjustment_set_value (vadjustment, v + 1.0);
 
       gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-      gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+      gtk_widget_size_allocate (scroller, &fake_alloc, -1);
     }
   // We are now at the bottom, so...
   g_assert_cmpint (GD_MODEL_LIST_BOX (listbox)->model_to, ==, g_list_model_get_n_items (G_LIST_MODEL (store)));
@@ -366,7 +363,7 @@ scrolling (void)
       gtk_adjustment_set_value (vadjustment, v - 1.0);
 
       gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-      gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+      gtk_widget_size_allocate (scroller, &fake_alloc, -1);
     }
   // And now at the top, so...
   g_assert_cmpint (GD_MODEL_LIST_BOX (listbox)->model_from, ==, 0);
@@ -385,7 +382,6 @@ overscroll_top (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -432,14 +428,14 @@ overscroll_top (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // We have one small row on top and several larger ones below that.
 
   // First, scroll the first row out of view so the current estimated list height is
   // exclusively controled by the larger rows
   gtk_adjustment_set_value (vadjustment, ROW_HEIGHT + 5);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // Now, the estimated list size should be n * (5 * ROW_HEIGHT).
   g_assert_cmpint ((int)gtk_adjustment_get_upper (vadjustment), ==, 10 * (5 * ROW_HEIGHT));
@@ -458,7 +454,7 @@ overscroll_top (void)
   gtk_adjustment_set_value (vadjustment,
                             gtk_adjustment_get_value (vadjustment) - (ROW_HEIGHT + 10));
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   g_object_unref (G_OBJECT (scroller));
 }
@@ -471,7 +467,6 @@ scroll_to_bottom_resize (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -510,28 +505,28 @@ scroll_to_bottom_resize (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // Scroll to the bottom
   gtk_adjustment_set_value (vadjustment,
                             gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
 
   // This should not change anything...
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // Now, add one pixel height, causing the items to be allocated one pixel too far at the top,
   // i.e. the last row is not allocated at the very bottom of the list...
   // Unless the listbox fixes this
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
   fake_alloc.height += 1;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // Now fuck it really up
   while (fake_alloc.height < 2000)
     {
       gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
       fake_alloc.height += 1;
-      gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+      gtk_widget_size_allocate (scroller, &fake_alloc, -1);
     }
 
   g_object_unref (G_OBJECT (scroller));
@@ -545,7 +540,6 @@ model_change (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -584,17 +578,17 @@ model_change (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // We are at the very top, the last item is NOT visible, so remove it and see what happens...
   g_list_store_remove (store, g_list_model_get_n_items (G_LIST_MODEL (store)) - 1);
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // But the first item is clearly visible, what happens if we remove that one?
   g_list_store_remove (store, 0);
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 }
 
 static void
@@ -605,7 +599,6 @@ model_change_at_bottom (void)
   GListStore *store = g_list_store_new (GTK_TYPE_LABEL); // Shrug
   int min, nat;
   GtkAllocation fake_alloc;
-  GtkAllocation fake_clip;
   GtkAdjustment *vadjustment;
   int i;
 
@@ -644,14 +637,14 @@ model_change_at_bottom (void)
   fake_alloc.y = 0;
   fake_alloc.width = MAX (min, 300);
   fake_alloc.height = 500;
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   g_message ("________________________________");
   // Scroll to bottom
   double new_value = gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment);
   gtk_adjustment_set_value (vadjustment, new_value);
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 
   // Now insert more elements at the end of the model
   for (i = 0; i < 2; i ++)
@@ -662,7 +655,7 @@ model_change_at_bottom (void)
     }
 
   gtk_widget_measure (scroller, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  gtk_widget_size_allocate (scroller, &fake_alloc, -1, &fake_clip);
+  gtk_widget_size_allocate (scroller, &fake_alloc, -1);
 }
 
 int
