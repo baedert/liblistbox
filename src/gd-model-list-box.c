@@ -738,8 +738,7 @@ __snapshot (GtkWidget   *widget,
                             0, 0,
                             gtk_widget_get_width (widget),
                             gtk_widget_get_height (widget)
-                          ),
-                          "GdModelListBox clip");
+                          ));
 
   Foreach_Row
     gtk_widget_snapshot_child (widget,
@@ -887,7 +886,6 @@ __finalize (GObject *obj)
   g_clear_object (&self->hadjustment);
   g_clear_object (&self->vadjustment);
   g_clear_object (&self->model);
-  g_clear_object (&self->press_gesture);
 
   G_OBJECT_CLASS (gd_model_list_box_parent_class)->finalize (obj);
 }
@@ -976,6 +974,8 @@ gd_model_list_box_class_init (GdModelListBoxClass *class)
 static void
 gd_model_list_box_init (GdModelListBox *self)
 {
+  GtkGesture *press_gesture;
+
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   self->widgets    = g_ptr_array_sized_new (20);
@@ -984,7 +984,8 @@ gd_model_list_box_init (GdModelListBox *self)
   self->model_to   = 0;
   self->bin_y_diff = 0;
 
-  self->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
-  g_signal_connect (self->press_gesture, "pressed", G_CALLBACK (pressed_cb), self);
-  g_signal_connect (self->press_gesture, "released", G_CALLBACK (released_cb), self);
+  press_gesture = gtk_gesture_multi_press_new ();
+  g_signal_connect (press_gesture, "pressed", G_CALLBACK (pressed_cb), self);
+  g_signal_connect (press_gesture, "released", G_CALLBACK (released_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (press_gesture));
 }
