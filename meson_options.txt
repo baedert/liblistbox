@@ -1,1 +1,1 @@
-option('demos', type: 'boolean', value: 'false')
+option('demos', type: 'boolean', value: 'true')
