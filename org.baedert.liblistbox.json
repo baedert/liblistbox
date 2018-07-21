@@ -1,0 +1,80 @@
+{
+    "app-id" : "org.baedert.liblistbox",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "master",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "demo",
+    "finish-args" : [
+        "--socket=wayland",
+        "--share=network"
+    ],
+    "build-options" : {
+        "cflags" : "-g",
+        "env" : {
+            "GTK_INTERACTIVE" : "true"
+        }
+    },
+    "modules" : [
+        {
+            "name" : "wayland",
+            "buildsystem" : "autotools",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/wayland-project/wayland.git",
+                    "tag" : "1.15.0"
+                }
+            ],
+            "config-opts" : [
+                "--disable-documentation"
+            ]
+        },
+        {
+            "name" : "graphene",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/ebassi/graphene.git",
+                    "tag" : "1.8.2"
+                }
+            ],
+            "config-opts" : [
+                "--libdir=lib",
+                "-Dintrospection=false",
+                "-Dtests=false",
+                "-Dbenchmarks=false"
+            ]
+        },
+        {
+            "name" : "gtk-4.0",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "--prefix=/app",
+                "--libdir=lib",
+                "-Dintrospection=false",
+                "-Ddemos=false",
+                "-Dbuild-tests=false"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://download.gnome.org/sources/gtk+/3.94/gtk+-3.94.0.tar.xz",
+                    "sha256" : "a947caa5296610b0f1d7a03b58df34765c227c577c78e683e75eea3251a67035"
+                }
+            ]
+        },
+        {
+            "name" : "liblistbox",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/baedert/liblistbox"
+                }
+            ]
+        }
+    ]
+}
