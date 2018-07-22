@@ -14,7 +14,8 @@ headers = files([
 liblistbox = library(
   'listbox',
   sources,
-  dependencies: gtk_dep
+  dependencies: gtk_dep,
+  install: true
 )
 
 # Reference this from a superproject
@@ -35,18 +36,20 @@ if get_option('demos')
     'imagelist',
     'demos/imagelist.c',
     dependencies: demo_deps,
+    install: true
   )
 
   demo_demo = executable(
     'demo',
     'demos/demo.c',
-    dependencies: demo_deps
+    dependencies: demo_deps,
+    install: true
   )
 
-  columns_demo = executable(
-    'columns',
-    'demos/columns.c',
-    dependencies: demo_deps
-  )
+  # columns_demo = executable(
+  #   'columns',
+  #   'demos/columns.c',
+  #   dependencies: demo_deps
+  # )
 
 endif
